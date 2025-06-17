@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     console.log('Canvas and context obtained.');
 
-    const canvasWidth = 600;
-    const canvasHeight = 400;
+    const canvasWidth = 1000;
+    const canvasHeight = 700;
     canvas.width = canvasWidth;
     canvas.height = canvasHeight;
 
@@ -82,8 +82,26 @@ document.addEventListener('DOMContentLoaded', () => {
         undoButton.disabled = true;
         controlsDiv.appendChild(undoButton);
         undoButton.addEventListener('click', undoLastAction);
+
+        const clearPanelButton = document.createElement('button');
+        clearPanelButton.textContent = 'Clear Panel';
+        clearPanelButton.id = 'clear-panel-button';
+        controlsDiv.appendChild(clearPanelButton);
+        clearPanelButton.addEventListener('click', clearPanel); // clearPanel will be defined later
     } else {
         console.error("Controls DIV (#controls) not found. UI buttons cannot be added.");
+    }
+
+    // NEW function: clearPanel
+    function clearPanel() {
+        saveStateForUndo(); // Save current state so "clear" can be undone
+
+        placedComponents = [];
+        wires = [];
+        nextComponentInstanceId = 0; // Reset instance ID counter
+
+        // console.log("Panel cleared."); // Optional feedback
+        redrawCanvas();
     }
 
     function saveStateForUndo() {
